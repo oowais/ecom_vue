@@ -2,14 +2,17 @@
   <div class="page-search">
     <div class="columns is-multiline">
       <div class="column is-12">
-        <h1 class="title">Search</h1>
-        <h2 class="is-size-5 has-text-grey">Serach term: {{ query }}</h2>
+        <h1 class="title">Search Results</h1>
+        <h2 class="is-size-5 has-text-grey">Search term: {{ query }}</h2>
       </div>
       <ProductCard
         v-for="product in products"
         :key="product.id"
         :product="product"
       ></ProductCard>
+      <div v-if="products.length === 0">
+        <h1 class="subtitle">No products related to {{ query }} 😒</h1>
+      </div>
     </div>
   </div>
 </template>
@@ -46,10 +49,9 @@ export default {
       this.$store.commit("setIsLoading", true);
 
       await axios
-        .post('/api/v1/products/search/', {'query': this.query})
+        .post("/api/v1/products/search/", { query: this.query })
         .then((res) => {
           this.products = res.data;
-
         })
         .catch((err) => {
           console.log(err);
