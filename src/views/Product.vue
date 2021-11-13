@@ -56,6 +56,8 @@ export default {
         .get(`/api/v1/products/${category_slug}/${product_slug}/`)
         .then((res) => {
           this.product = res.data;
+
+          document.title = this.product.name + " | eCom";
         })
         .catch((err) => {
           console.log(err);

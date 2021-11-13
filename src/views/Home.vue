@@ -51,6 +51,8 @@ export default {
   components: {},
   mounted() {
     this.getLatestProducts();
+
+    document.title = "Home | eCom";
   },
   methods: {
     async getLatestProducts() {
