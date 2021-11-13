@@ -94,20 +94,16 @@
           </div>
         </div>
         <div class="notification is-danger mt-4" v-if="errors.length">
-            <p v-for="error in errors" :key="error">{{ error }}</p>
-          </div>
+          <p v-for="error in errors" :key="error">{{ error }}</p>
+        </div>
 
+        <div id="card-element" class="mb-5"></div>
+
+        <template v-if="cartTotalLength">
           <hr />
-
-          <div id="card-element" class="mb-5"></div>
-
-          <template v-if="cartTotalLength">
-            <hr />
-            <button class="button is-dark" @click="submitForm">
-              Pay with Stripe
-            </button>
-          </template>
-          <template else></template>
+          <button class="button is-dark" @click="submitForm">Pay</button>
+        </template>
+        <template else></template>
       </div>
     </div>
   </div>
@@ -116,6 +112,7 @@
 <script>
 import axios from "axios";
 import { toast } from "bulma-toast";
+import LogInVue from "./LogIn.vue";
 
 export default {
   name: "Checkout",
@@ -146,29 +143,70 @@ export default {
       return item.quantity * item.product.price;
     },
     submitForm() {
-        this.errors = []
+      this.errors = [];
 
-        if(this.first_name === '') {
-            this.errors.push('First name is missing!')
-        }
-        if(this.last_name === '') {
-            this.errors.push('Last name is missing!')
-        }
-        if(this.email === '') {
-            this.errors.push('Email Address is missing!')
-        }
-        if(this.phone === '') {
-            this.errors.push('Phone is missing!')
-        }
-        if(this.address === '') {
-            this.errors.push('Address is missing!')
-        }
-        if(this.zipcode === '') {
-            this.errors.push('Zipcode is missing!')
-        }
-        if(this.place === '') {
-            this.errors.push('Place is missing!')
-        }
+      if (this.first_name === "") {
+        this.errors.push("First name is missing!");
+      }
+      if (this.last_name === "") {
+        this.errors.push("Last name is missing!");
+      }
+      if (this.email === "") {
+        this.errors.push("Email Address is missing!");
+      }
+      if (this.phone === "") {
+        this.errors.push("Phone is missing!");
+      }
+      if (this.address === "") {
+        this.errors.push("Address is missing!");
+      }
+      if (this.zipcode === "") {
+        this.errors.push("Zipcode is missing!");
+      }
+      if (this.place === "") {
+        this.errors.push("Place is missing!");
+      }
+      //need to clear the cart and add order
+      if (!this.errors.length) {
+        this.$store.commit("setIsLoading", true);
+
+        this.onSubmitHandler();
+      }
+    },
+    async onSubmitHandler() {
+      const items = [];
+      for (let i = 0; i < this.cart.items.length; i++) {
+        const item = this.cart.items[i];
+        const obj = {
+          product: item.product.id,
+          quantity: item.quantity,
+          price: item.quantity * item.product.price,
+        };
+        items.push(obj);
+      }
+
+      const data = {
+        first_name: this.first_name,
+        last_name: this.last_name,
+        email: this.email,
+        address: this.address,
+        zipcode: this.zipcode,
+        place: this.place,
+        phone: this.phone,
+        items: items,
+      };
+
+      await axios
+        .post("/api/v1/checkout/", data)
+        .then((res) => {
+          this.$store.commit("clearCart");
+          this.$router.push("/cart/success");
+        })
+        .catch((err) => {
+          this.errors.push("Something went wrong, try again! 😢");
+          console.log(err);
+        });
+      this.$store.commit("setIsLoading", false);
     },
   },
   computed: {
