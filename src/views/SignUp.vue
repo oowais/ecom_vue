@@ -56,6 +56,9 @@ export default {
       errors: [],
     };
   },
+  mounted() {
+    document.title = "Sign Up | eCom";
+  },
   methods: {
     submitForm() {
       this.errors = [];
