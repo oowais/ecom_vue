@@ -24,11 +24,17 @@
         :class="{ 'is-active': showMobileMenu }"
       >
         <div class="navbar-end">
-          <router-link to="/category1" class="navbar-item"
-            >Category 1</router-link
+          <router-link to="/electronics" class="navbar-item"
+            >Electronics</router-link
           >
-          <router-link to="/category2" class="navbar-item"
-            >Category 2</router-link
+          <router-link to="/jewelery" class="navbar-item"
+            >Jewelery</router-link
+          >
+          <router-link to="/mens-clothing" class="navbar-item"
+            >Men's Clothing</router-link
+          >
+          <router-link to="/womens-clothing" class="navbar-item"
+            >Women's Clothing</router-link
           >
 
           <div class="navbar-item">

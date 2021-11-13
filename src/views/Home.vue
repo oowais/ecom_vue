@@ -1,14 +1,82 @@
 <template>
   <div class="home">
-    Home
+    <section class="hero is-medium is-dark mb-6">
+      <div class="hero-body has-text-centered">
+        <p class="title mb-6">Welcome to eCom</p>
+        <p class="subtitle">Online Store for your needs!</p>
+      </div>
+    </section>
+
+    <div class="columns is-multiline">
+      <div class="column is-12">
+        <h2 class="is-size-2 has-text-centered">Latest Products</h2>
+      </div>
+
+      <div
+        class="column is-3"
+        v-for="product in latestProducts"
+        :key="product.id"
+      >
+        <div class="box card">
+          <figure class="image mb-4">
+            <img :src="product.get_thumbnail" />
+          </figure>
+
+          <div class="card-details">
+            <h3 class="is-size-5">{{ product.name }}</h3>
+            <p class="is-size-6 has-text-grey">€{{ product.price }}</p>
+
+            View Details
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 
 export default {
-  name: 'Home',
-  components: {
-  }
-}
+  name: "Home",
+  data() {
+    return {
+      latestProducts: [],
+    };
+  },
+  components: {},
+  mounted() {
+    this.getLatestProducts();
+  },
+  methods: {
+    getLatestProducts() {
+      axios
+        .get("api/v1/latest-products/")
+        .then((res) => {
+          this.latestProducts = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+};
 </script>
+
+
+<style scoped>
+.image {
+  width: 200px;
+}
+
+.card {
+  width: 400px;
+  height: 500px;
+}
+
+.card-details {
+  position: absolute;
+  bottom: 1em;
+  margin-right: 0.5em;
+}
+</style>
