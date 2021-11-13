@@ -17,7 +17,7 @@ export default createStore({
         localStorage.setItem('cart', JSON.stringify(state.cart))
       }
     },
-    addtoCart(state, item) {
+    addToCart(state, item) {
       const exists = state.cart.items.filter(i => i.product.id === item.product.id)
 
       if (exists.length) {
