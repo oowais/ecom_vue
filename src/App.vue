@@ -27,9 +27,7 @@
           <router-link to="/electronics" class="navbar-item"
             >Electronics</router-link
           >
-          <router-link to="/jewelery" class="navbar-item"
-            >Jewelery</router-link
-          >
+          <router-link to="/jewelery" class="navbar-item">Jewelery</router-link>
           <router-link to="/mens-clothing" class="navbar-item"
             >Men's Clothing</router-link
           >
@@ -68,7 +66,13 @@ export default {
   data() {
     return {
       showMobileMenu: false,
+      cart: {
+        items: [],
+      },
     };
+  },
+  beforeCreate() {
+    this$store.commit("initializeStore");
   },
 };
 </script>
@@ -76,4 +80,13 @@ export default {
 
 <style lang="scss">
 @import "../node_modules/bulma";
+[debug],
+[debug] *:not(g):not(path) {
+  color: hsla(210, 100%, 100%, 0.9) !important;
+  background: hsla(210, 100%, 50%, 0.5) !important;
+  outline: solid 0.25rem hsla(210, 100%, 100%, 0.5) !important;
+
+  box-shadow: none !important;
+  filter: none !important;
+}
 </style>
