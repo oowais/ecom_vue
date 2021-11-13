@@ -46,10 +46,13 @@ export default {
     this.getProduct();
   },
   methods: {
-    getProduct() {
+    async getProduct() {
+      this.$store.commit("setIsLoading", true);
+
       const category_slug = this.$route.params.category_slug;
       const product_slug = this.$route.params.product_slug;
-      axios
+
+      await axios
         .get(`/api/v1/products/${category_slug}/${product_slug}/`)
         .then((res) => {
           this.product = res.data;
@@ -57,6 +60,7 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+      this.$store.commit("setIsLoading", false);
     },
     addToCart() {
       if (isNaN(this.quantity) || this.quantity < 1) {
@@ -70,13 +74,13 @@ export default {
       this.$store.commit("addToCart", item);
 
       toast({
-        message: this.product.name + ' added to Cart!',
-        type: 'is-success',
+        message: this.product.name + " added to Cart!",
+        type: "is-success",
         dismissible: true,
         pauseOnHover: true,
         duration: 2000,
-        position: 'bottom-center'
-      })
+        position: "bottom-center",
+      });
     },
   },
 };
