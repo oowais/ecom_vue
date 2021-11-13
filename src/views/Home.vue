@@ -53,8 +53,9 @@ export default {
     this.getLatestProducts();
   },
   methods: {
-    getLatestProducts() {
-      axios
+    async getLatestProducts() {
+      this.$store.commit("setIsLoading", true);
+      await axios
         .get("api/v1/latest-products/")
         .then((res) => {
           this.latestProducts = res.data;
@@ -62,6 +63,7 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+      this.$store.commit("setIsLoading", false);
     },
   },
 };
